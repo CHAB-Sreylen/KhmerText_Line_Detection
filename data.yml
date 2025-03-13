@@ -1,0 +1,13 @@
+names:
+- text
+- logo
+- qr
+- stamp
+- footer
+nc: 5
+test: /home/ubuntu-vilalab/Desktop/Len/Testset/test/images
+test_labels: /home/ubuntu-vilalab/Desktop/Len/Testset/test/labels
+train: /home/ubuntu-vilalab/Desktop/Len/16000Data/images/train
+train_labels: /home/ubuntu-vilalab/Desktop/Len/16000Data/labels/train
+val: /home/ubuntu-vilalab/Desktop/Len/16000Data/images/val
+val_labels: /home/ubuntu-vilalab/Desktop/Len/16000Data/labels/val
