@@ -48,8 +48,8 @@ header2 = "ជាតិ សាសនា ព្រះមហាក្សត្រ"
 header3_unicode = "\u0033"
 # corpus_path = "corpus/10000Line-230Words-Cleaned.txt"
 
-corpus_path = "corpus/Text_100_words.txt"
-title_path = "corpus/Title_47_words.txt"
+corpus_path = r"PillowCreateFile/corpus/Text_100_words.txt"
+title_path = r"PillowcreateFile/corpus/Title_47_words.txt"
 
 with open(corpus_path, 'r', encoding="utf-8") as file:
     paragraphs = [line.strip() for line in file.readlines() if line.strip()]
@@ -57,10 +57,10 @@ with open(corpus_path, 'r', encoding="utf-8") as file:
 with open(title_path, 'r', encoding="utf-8") as file:
     titles = [line.strip() for line in file.readlines() if line.strip()]
 
-font_MPTCMoul = "fonts/KhmerMPTCMoul.ttf"
-font_MPTC = "fonts/KhmerMPTC.ttf"
-font_SiemReap = "fonts/KhmerOS_siemreap.otf"
-font_taktieng = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+font_MPTCMoul = "PillowCreateFile/fonts/KhmerMPTCMoul.ttf"
+font_MPTC = "PillowCreateFile/fonts/KhmerMPTC.ttf"
+font_SiemReap = "PillowCreateFile/fonts/KhmerOS_siemreap.otf"
+font_taktieng = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
 
 font_header1_size = 54
 font_header2_size = 50
@@ -72,10 +72,10 @@ footer_font_size = 40
 
 # output_dir1 = "output/labels"
 # os.makedirs(output_dir1, exist_ok=True)  # Corrected: create labels directory
-output_dir = "C:/16000Doc/sample5/images"
+output_dir = r"../KhmerText_Line_Detection/data/images"
 os.makedirs(output_dir, exist_ok=True)
 
-output_dir1 = "C:/16000Doc/sample5/labels"
+output_dir1 = r"../KhmerText_Line_Detection/data/labels"
 os.makedirs(output_dir1, exist_ok=True)
 
 header_color = (0x16, 0x2D, 0x7B)
@@ -84,9 +84,9 @@ footer_color = (0x16, 0x2D, 0x7B)
 
 a4_width_px, a4_height_px = 2480, 3508
 
-for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=21001):
+for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=1):
     # Reset yolo_boxes for each new image so that annotations do not carry over
-    if i > 24000:  # Stop after generating page 8000
+    if i > 2:  # Stop after generating page 8000
         print("Reached page 10000. Stopping rendering.")
         break
     yolo_boxes = []
@@ -111,17 +111,17 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=21001):
     header2_bbox = draw_text_without_bbox(draw, (header2_x, header2_y), header2, font=font_header2, fill=header_color, label="text")
 
     confirm_text = "\u0033"
-    font_confirm_text = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+    font_confirm_text = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
     confirm_y = header2_bbox[3] + 100
     confirm_x = (a4_width_px - draw.textlength(confirm_text, font=font_confirm_text)) / 2
-    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color, label="decorative")
+    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color, label="nonetext")
 
-    logo_pil = Image.open('img/MPTC_logo.png').convert('RGBA')
+    logo_pil = Image.open('PillowCreateFile/img/MPTC_logo.png').convert('RGBA')
     logo_x, logo_y = 380, 270
     image.paste(logo_pil, (logo_x, logo_y), logo_pil)
     logo_bbox = (logo_x, logo_y, logo_x + logo_pil.width, logo_y + logo_pil.height)
     # draw.rectangle(logo_bbox, outline=(255, 0, 0), width=2)
-    add_yolo_box("logo", logo_bbox)
+    add_yolo_box("nonetext", logo_bbox)
 
     text_name = 'ក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍'
     name_x, name_y = 150, logo_y + 270
@@ -226,46 +226,67 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=21001):
 
 
     line_width = 1
-    draw.line([(150, top+100), (2330, top+100)], fill=header_color, width=line_width)
+    line_y = top+100
+    draw.line([(150, line_y), (2330, line_y)], fill=header_color, width=line_width)
 
-    def get_text_bbox(draw, position, text, font):
-        """Get the bounding box of text."""
-        left, top_bbox, right, bottom_bbox = draw.textbbox(position, text, font=font)
-        return left, top_bbox, right, bottom_bbox
+    # def get_text_bbox(draw, position, text, font):
+    #     """Get the bounding box of text."""
+    #     left, top_bbox, right, bottom_bbox = draw.textbbox(position, text, font=font)
+    #     return left, top_bbox, right, bottom_bbox
 
-    # Store bounding box coordinates
-    all_left = float('inf')
-    all_top = float('inf')
-    all_right = float('-inf')
-    all_bottom = float('-inf')
+    # # Store bounding box coordinates
+    # all_left = float('inf')
+    # all_top = float('inf')
+    # all_right = float('-inf')
+    # all_bottom = float('-inf')
 
-    footer_texts = [
-        ('អគារលេខ១៣ មហាវិថីព្រះមុនីវង្ស សង្កាត់ស្រះចក', 150, top+150),
-        ('ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ 120210', 150, top+200),
-        ('123 023 724 810', 2000, top+150),
-        ('www.mptc.gov.kh', 2000, top+200),
-    ]
+    # footer_texts = [
+    #     ('អគារលេខ១៣ មហាវិថីព្រះមុនីវង្ស សង្កាត់ស្រះចក', 150, top+150),
+    #     ('ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ 120210', 150, top+200),
+    #     ('123 023 724 810', 2000, top+150),
+    #     ('www.mptc.gov.kh', 2000, top+200),
+    # ]
 
-    # Draw the text elements first, then calculate the bounding box
-    for text, x, y in footer_texts:
-        font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
-        draw.text((x, y), text, font=font_footer_text, fill=footer_color)
+    # # Draw the text elements first, then calculate the bounding box
+    # for text, x, y in footer_texts:
+    #     font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    #     draw.text((x, y), text, font=font_footer_text, fill=footer_color)
 
-    # Calculate the bounding box based on the drawn text
-    for text, x, y in footer_texts:
-        font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
-        left, top_bbox, right, bottom_bbox = get_text_bbox(draw, (x, y), text, font_footer_text)
+    # # Calculate the bounding box based on the drawn text
+    # for text, x, y in footer_texts:
+    #     font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    #     left, top_bbox, right, bottom_bbox = get_text_bbox(draw, (x, y), text, font_footer_text)
 
-        # Update overall bounding box
-        all_left = min(all_left, left)
-        all_top = min(all_top, top_bbox)
-        all_right = max(all_right, right)
-        all_bottom = max(all_bottom, bottom_bbox)
+    #     # Update overall bounding box
+    #     all_left = min(all_left, left)
+    #     all_top = min(all_top, top_bbox)
+    #     all_right = max(all_right, right)
+    #     all_bottom = max(all_bottom, bottom_bbox)
         
-    # draw.rectangle((all_left, all_top, all_right, all_bottom), outline="red", width=2) #add some padding
-    bbox = (all_left,all_top, all_right, all_bottom)
-    add_yolo_box("footer",bbox)
+    # # draw.rectangle((all_left, all_top, all_right, all_bottom), outline="red", width=2) #add some padding
+    # bbox = (all_left,all_top, all_right, all_bottom)
+    # add_yolo_box("footer",bbox)
     # draw_text_without_bbox(draw, (x,y), text, font=font_text, fill=text_color, label="footer")
+    
+    footer_text = 'អគារលេខ១៣ មហាវិថីព្រះមុនីវង្ស សង្កាត់ស្រះចក'
+    Date_x, Date_y = 150, top + 130
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
+
+    footer_text = 'ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ 120210'
+    Date_x, Date_y = 150, top + 180
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
+
+    footer_text = '123   023 724 810'
+    Date_x, Date_y = 2000, top + 130
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
+
+    footer_text = 'www.mptc.gov.kh'
+    Date_x, Date_y = 2000, top + 180
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
     output_path = os.path.join(output_dir, f"kh_doc{i}.jpg")
     image.save(output_path, format="JPEG", quality=10, optimize=True)
 
