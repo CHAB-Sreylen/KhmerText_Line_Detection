@@ -84,9 +84,9 @@ footer_color = (0x16, 0x2D, 0x7B)
 
 a4_width_px, a4_height_px = 2480, 3508
 
-for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=1):
+for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=111):
     # Reset yolo_boxes for each new image so that annotations do not carry over
-    if i > 2:  # Stop after generating page 8000
+    if i > 112:  # Stop after generating page 8000
         print("Reached page 10000. Stopping rendering.")
         break
     yolo_boxes = []
