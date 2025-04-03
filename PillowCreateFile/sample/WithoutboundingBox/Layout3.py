@@ -22,12 +22,8 @@ def wrap_text(text, font, max_width, draw):
 
 yolo_boxes = []
 label_to_id = {
-    "decorative": 0,
-    "text": 1,
-    "logo": 2,
-    "qr": 3,
-    "stamp": 4,
-    "footer": 5
+    "nonetext": 0,
+    "text": 1
 }
 
 def add_yolo_box(label, bbox):
@@ -56,8 +52,8 @@ header_1 = "ព្រះរាជាណាចក្រកម្ពុជា"
 header_2 = "ជាតិ សាសនា ព្រះមហាក្សត្រ"
 header_3_unicode = "\u0033"
 
-corpus_path = "corpus/paragraph.txt"
-title_path = "corpus/Title_47_words.txt"
+corpus_path = "PillowCreateFile/corpus/paragraph.txt"
+title_path = "PillowCreateFile/corpus/Title_47_words.txt"
 
 def read_lines_reverse(file_path):
     try:
@@ -76,10 +72,10 @@ paragraphs = read_lines_reverse(corpus_path)
 titles = read_lines_reverse(title_path)
 
 
-font_MPTCMoul = "fonts/KhmerMPTCMoul.ttf"
-font_MPTC = "fonts/KhmerMPTC.ttf"
-font_SiemReap = "fonts/KhmerOS_siemreap.otf"
-font_taktieng = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+font_MPTCMoul = "PillowCreateFile/fonts/KhmerMPTCMoul.ttf"
+font_MPTC = "PillowCreateFile/fonts/KhmerMPTC.ttf"
+font_SiemReap = "PillowCreateFile/fonts/KhmerOS_siemreap.otf"
+font_taktieng = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
 
 font_header_1_size = 54
 font_header_2_size = 50
@@ -92,12 +88,11 @@ footer_font_size = 40
 # output_dir1 = "output/labels"
 # os.makedirs(output_dir1, exist_ok=True)
 
-
-output_dir = "C:/16000Doc/sample5/images"
+output_dir = r"KhmerText_Line_Detection\data/images"
 os.makedirs(output_dir, exist_ok=True)
 
-output_dir1 = "C:/16000Doc/sample5/labels"
-os.makedirs(output_dir1, exist_ok=True)
+output_labels = r"KhmerText_Line_Detection\data/labels"
+os.makedirs(output_labels, exist_ok=True)
 
 header_color = (0x16, 0x2D, 0x7B)
 text_color = (0, 0, 0)
@@ -105,8 +100,8 @@ footer_color = (0x16, 0x2D, 0x7B)
 
 a4_width_px, a4_height_px = 2480, 3508
 
-for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
-    if i > 9000:  # Stop after generating page 8000
+for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=1):
+    if i > 2:  # Stop after generating page 8000
         print("Reached page 6000. Stopping rendering.")
         break    
     yolo_boxes = []
@@ -133,10 +128,10 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
     header_2_bbox = draw_text_without_bbox(draw, (header_2_x, header_2_y), header_2, font=font_header_2, fill=header_color,label="text")
 
     confirm_text = "\u0033"
-    font_confirm_text = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+    font_confirm_text = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
     confirm_y = header_2_bbox[3] + 100
     confirm_x = (a4_width_px - draw.textlength(confirm_text, font=font_confirm_text)) / 2
-    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color,label="decorative")
+    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color,label="nonetext")
 
     # max_text_width = a4_width_px - 300
     # wrapped_lines = wrap_text(paragraphs, font_text, max_text_width, draw)
@@ -148,24 +143,24 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
     #     bbox = draw_text_without_bbox(draw, (start_x, top), line, font_text, fill=text_color)
     #     top += (bbox[3] - bbox[1]) + line_spacing
 
-    logo_pil = Image.open('img/MPTC_logo.png').convert('RGBA')
+    logo_pil = Image.open('PillowCreateFile/img/MPTC_logo.png').convert('RGBA')
     logo_x, logo_y = 380, 270
     image.paste(logo_pil, (logo_x, logo_y), logo_pil)
     logo_bbox = (logo_x, logo_y, logo_x + logo_pil.width, logo_y + logo_pil.height)
     # draw.rectangle(logo_bbox, outline=(255, 0, 0), width=2)
-    add_yolo_box("logo", logo_bbox)
+    add_yolo_box("nonetext", logo_bbox)
 
     text_name = 'ក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍'
     name_x, name_y = 150, logo_y + 270
     text_font_name = ImageFont.truetype(font_MPTCMoul, text_font_size)
     draw_text_without_bbox(draw, (name_x, name_y), text_name, font=text_font_name, fill=header_color,label="text")
 
-    logo_pil = Image.open('img/num_logo.png').convert('RGBA')
+    logo_pil = Image.open('PillowCreateFile/img/num_logo.png').convert('RGBA')
     logo_x, logo_y = 1800, 270
     image.paste(logo_pil, (logo_x, logo_y), logo_pil)
     logo_bbox = (logo_x, logo_y, logo_x + logo_pil.width, logo_y + logo_pil.height)
     # draw.rectangle(logo_bbox, outline=(255, 0, 0), width=2)
-    add_yolo_box("logo",logo_bbox)
+    add_yolo_box("nonetext",logo_bbox)
 
 
     text_name = 'សកលវិទ្យាល័យជាតិគ្រប់គ្រង'
@@ -230,18 +225,18 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
 
     # # QR Codes and Stamps
 
-    stamp = Image.open('img/num_stamp.png').convert('RGBA').resize((700, 500), Image.LANCZOS)
+    stamp = Image.open('PillowCreateFile/img/num_stamp.png').convert('RGBA').resize((700, 500), Image.LANCZOS)
     stamp_x, stamp_y = int(a4_width_px /2) + 350 , top+60
     image.paste(stamp, (stamp_x, stamp_y), stamp)
     num_stamp = (stamp_x, stamp_y, stamp_x + 700, stamp_y + 500)
-    add_yolo_box("stamp",num_stamp)
+    add_yolo_box("nonetext",num_stamp)
 
 
-    stamp = Image.open('img/MPTC_stamp.png').convert('RGBA').resize((650, 500), Image.LANCZOS)
+    stamp = Image.open('PillowCreateFile/img/MPTC_stamp.png').convert('RGBA').resize((650, 500), Image.LANCZOS)
     stamp_x, stamp_y = int(a4_width_px /2) - 650 , top+150
     image.paste(stamp, (stamp_x, stamp_y), stamp)
     mptc_logo = (stamp_x, stamp_y, stamp_x + 650, stamp_y + 500)
-    add_yolo_box("stamp",mptc_logo)
+    add_yolo_box("nonetext",mptc_logo)
 
     font_qr = 22
     text_date = 'សូមទាញយកឯកសារតាមរយ:​'
@@ -257,11 +252,11 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
     draw_text_without_bbox(draw, (Date_x, Date_y), text_date, font=font_text_date, fill=text_color,label="text")
 
 
-    qr_info = Image.open('img/Gov_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    qr_info = Image.open('PillowCreateFile/img/Gov_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     info_qr_x, info_qr_y = 390, top + 450
     image.paste(qr_info, (info_qr_x, info_qr_y), qr_info)
     qr = (info_qr_x, info_qr_y, info_qr_x + 300, info_qr_y + 300)
-    add_yolo_box("qr",qr)
+    add_yolo_box("nonetext",qr)
 
     font_qr = 28
     text_date = 'go.gov.kh/dgc/240212ntif'
@@ -285,7 +280,7 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=6001):
     output_path = os.path.join(output_dir, f"kh_doc{i}.jpg")
     image.save(output_path, format="JPEG", quality=20, optimize=True)
 
-    annotations_path = os.path.join(output_dir1, f"kh_doc{i}.txt")
+    annotations_path = os.path.join(output_labels, f"kh_doc{i}.txt")
    
     with open(annotations_path, "w", encoding="utf-8") as f:
         for label, x_center, y_center, width_box, height_box in yolo_boxes:

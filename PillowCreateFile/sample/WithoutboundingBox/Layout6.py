@@ -129,12 +129,8 @@ start_x = 400  # X position for text
 
 # YOLO annotations dictionary
 label_to_id = {
-    "decorative": 0,
-    "text": 1,
-    "logo": 2,
-    "qr": 3,
-    "stamp": 4,
-    "footer": 5
+    "nonetext": 0,
+    "text": 1
 }
 
 def add_yolo_box(label, bbox):
@@ -168,11 +164,11 @@ def draw_text_wrapped(draw, position, text, font, fill, label):
 
     return y
 
-bullet_path = "corpus/bulletText.txt"
+bullet_path = "PillowCreateFile/corpus/bulletText.txt"
 with open(bullet_path, 'r', encoding="utf-8") as file:
     lines = [line.strip() for line in file.readlines() if line.strip()]
 
-font_MPTC = "fonts/KhmerMPTC.ttf"
+font_MPTC = "PillowCreateFile/fonts/KhmerMPTC.ttf"
 text_font_size = 48
 font_text = ImageFont.truetype(font_MPTC, text_font_size)
 
@@ -185,13 +181,13 @@ font_text = ImageFont.truetype(font_MPTC, text_font_size)
 # os.makedirs(output_dir1, exist_ok=True)
 
 
-output_dir = "C:/16000Doc/sample5/images"
+output_dir = r"KhmerText_Line_Detection/data/images"
 os.makedirs(output_dir, exist_ok=True)
 
-output_dir1 = "C:/16000Doc/sample5/labels"
+output_dir1 = r"KhmerText_Line_Detection/data/labels"
 os.makedirs(output_dir1, exist_ok=True)
 
-image_index = 17831
+image_index = 1
 
 yolo_boxes = []
 top = 100

@@ -21,12 +21,8 @@ def wrap_text(text, font, max_width, draw):
 
 yolo_boxes = []
 label_to_id = {
-    "decorative": 0,
-    "text": 1,
-    "logo": 2,
-    "qr": 3,
-    "stamp": 4,
-    "footer": 5
+    "nonetext": 0,
+    "text": 1
 }
 
 def add_yolo_box(label, bbox):
@@ -55,8 +51,8 @@ header_1 = "ព្រះរាជាណាចក្រកម្ពុជា"
 header_2 = "ជាតិ សាសនា ព្រះមហាក្សត្រ"
 header_3_unicode = "\u0033"
 
-corpus_path = "corpus/paragraph.txt"
-title_path = "corpus/Title_47_words.txt"
+corpus_path = "PillowCreateFile/corpus/paragraph.txt"
+title_path = "PillowCreateFile/corpus/Title_47_words.txt"
 
 
 def read_lines_reverse(file_path):
@@ -76,10 +72,10 @@ paragraphs = read_lines_reverse(corpus_path)
 titles = read_lines_reverse(title_path)
 
 
-font_MPTCMoul = "fonts/KhmerMPTCMoul.ttf"
-font_MPTC = "fonts/KhmerMPTC.ttf"
-font_SiemReap = "fonts/KhmerOS_siemreap.otf"
-font_taktieng = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+font_MPTCMoul = "PillowCreateFile/fonts/KhmerMPTCMoul.ttf"
+font_MPTC = "PillowCreateFile/fonts/KhmerMPTC.ttf"
+font_SiemReap = "PillowCreateFile/fonts/KhmerOS_siemreap.otf"
+font_taktieng = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
 
 font_header_1_size = 54
 font_header_2_size = 50
@@ -95,10 +91,10 @@ footer_font_size = 40
 
 
 
-output_dir = "C:/16000Doc/sample5/images"
+output_dir = r"KhmerText_Line_Detection\data/images"
 os.makedirs(output_dir, exist_ok=True)
 
-output_dir1 = "C:/16000Doc/sample5/labels"
+output_dir1 = r"KhmerText_Line_Detection\data/labels"
 os.makedirs(output_dir1, exist_ok=True)
 
 
@@ -108,8 +104,8 @@ footer_color = (0x16, 0x2D, 0x7B)
 
 a4_width_px, a4_height_px = 2480, 3508
 
-for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=9001):
-    if i > 12000:  # Stop after generating page 8000
+for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=1):
+    if i > 2:  # Stop after generating page 8000
         print("Reached page 8000. Stopping rendering.")
         break
     image = Image.new('RGB', (a4_width_px, a4_height_px), color='white')
@@ -135,18 +131,18 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=9001):
     header_2_bbox = draw_text_without_bbox(draw, (header_2_x, header_2_y), header_2, font=font_header_2, fill=header_color,label="text")
 
     confirm_text = "\u0033"
-    font_confirm_text = ImageFont.truetype("fonts/TACTENG.TTF", size=80)
+    font_confirm_text = ImageFont.truetype("PillowCreateFile/fonts/TACTENG.TTF", size=80)
     confirm_y = header_2_bbox[3] + 100
     confirm_x = (a4_width_px - draw.textlength(confirm_text, font=font_confirm_text)) / 2
-    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color,label="decorative")
+    confirm_bbox = draw_text_without_bbox(draw, (confirm_x, confirm_y), confirm_text, font=font_confirm_text, fill=header_color,label="nonetext")
 
 
-    logo_pil = Image.open('img/MPTC_logo.png').convert('RGBA')
+    logo_pil = Image.open('PillowCreateFile/img/MPTC_logo.png').convert('RGBA')
     logo_x, logo_y = 380, 270
     image.paste(logo_pil, (logo_x, logo_y), logo_pil)
     logo_bbox = (logo_x, logo_y, logo_x + logo_pil.width, logo_y + logo_pil.height)
     # draw.rectangle(logo_bbox, outline=(255, 0, 0), width=2)
-    add_yolo_box("logo",logo_bbox)
+    add_yolo_box("nonetext",logo_bbox)
 
     text_name = 'ក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍'
     name_x, name_y = 150, logo_y + 270
@@ -212,37 +208,37 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=9001):
 
 
     # QR Codes and Stamps
-    qr_register = Image.open('img/Register_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    qr_register = Image.open('PillowCreateFile/img/Register_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     register_qr_x, register_qr_y = 200, top + 300
     image.paste(qr_register, (register_qr_x, register_qr_y), qr_register)
     qr_reg_bbox = (register_qr_x, register_qr_y, register_qr_x + 300, register_qr_y + 300)
-    add_yolo_box("qr",qr_reg_bbox)
+    add_yolo_box("nonetext",qr_reg_bbox)
 
-    qr_info = Image.open('img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    qr_info = Image.open('PillowCreateFile/img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     info_qr_x, info_qr_y = 750, top + 300
     image.paste(qr_info, (info_qr_x, info_qr_y), qr_info)
     qr_reg_bbox = (info_qr_x, info_qr_y, info_qr_x + 300, info_qr_y + 300)
-    add_yolo_box("qr",qr_reg_bbox)
+    add_yolo_box("nonetext",qr_reg_bbox)
 
-    qr_info = Image.open('img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    qr_info = Image.open('PillowCreateFile/img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     info_qr_x, info_qr_y = 1250, top + 300
     image.paste(qr_info, (info_qr_x, info_qr_y), qr_info)
     qr_reg_bbox = (info_qr_x, info_qr_y, info_qr_x + 300, info_qr_y + 300)
-    add_yolo_box("qr",qr_reg_bbox)
+    add_yolo_box("nonetext",qr_reg_bbox)
 
-    qr_info = Image.open('img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    qr_info = Image.open('PillowCreateFile/img/Info_qr.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     info_qr_x, info_qr_y = 1750, top + 300
     image.paste(qr_info, (info_qr_x, info_qr_y), qr_info)
     qr_reg_bbox = (info_qr_x, info_qr_y, info_qr_x + 300, info_qr_y + 300)
-    add_yolo_box("qr",qr_reg_bbox)
+    add_yolo_box("nonetext",qr_reg_bbox)
 
 
 
-    stamp = Image.open('img/CleanStamp.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
+    stamp = Image.open('PillowCreateFile/img/CleanStamp.png').convert('RGBA').resize((300, 300), Image.LANCZOS)
     stamp_x, stamp_y = 1700, top- 80
     image.paste(stamp, (stamp_x, stamp_y), stamp)
     stamp = (stamp_x, stamp_y, stamp_x + 300, stamp_y + 300)
-    add_yolo_box("stamp",stamp)
+    add_yolo_box("nonetext",stamp)
 
     text_qr = 'សូម សាធារណជនទាំង​អស់ ជ្រាបជាព័ត៌មាន'
     Date_x,Date_y =150, top +40
@@ -274,46 +270,30 @@ for i, (paragraph,title) in enumerate(zip(paragraphs,titles), start=9001):
     draw_text_without_bbox(draw, (Date_x, Date_y), text_qr, font=font_text_qr, fill=text_color, label="text")
 
     line_width = 1
-    draw.line([(150, Date_y+100), (2330, Date_y+100)], fill=header_color, width=line_width)
+    Line_Y = Date_y + 100
+    draw.line([(150, Line_Y), (2330, Line_Y)], fill=header_color, width=line_width)
+
+    
+    footer_text = 'អគារលេខ១៣ មហាវិថីព្រះមុនីវង្ស សង្កាត់ស្រះចក'
+    Date_x, Date_y = 150, Line_Y+30
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
+
+    footer_text = 'ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ 120210'
+    Date_x, Date_y = 150, Line_Y + 80
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
 
 
-    def get_text_bbox(draw, position, text, font):
-        """Get the bounding box of text."""
-        left, top_bbox, right, bottom_bbox = draw.textbbox(position, text, font=font)
-        return left, top_bbox, right, bottom_bbox
+    footer_text = '123 023 724 810'
+    Date_x, Date_y = 2000, Line_Y + 30
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
 
-    # Store bounding box coordinates
-    all_left = float('inf')
-    all_top = float('inf')
-    all_right = float('-inf')
-    all_bottom = float('-inf')
-
-    footer_texts = [
-        ('អគារលេខ១៣ មហាវិថីព្រះមុនីវង្ស សង្កាត់ស្រះចក', 150, Date_y + 100),
-        ('ខណ្ឌដូនពេញ រាជធានីភ្នំពេញ 120210', 150, Date_y + 150),
-        ('123 023 724 810', 2000, Date_y + 100),
-        ('www.mptc.gov.kh', 2000, Date_y + 150),
-    ]
-
-    # Draw the text elements first, then calculate the bounding box
-    for text, x, y in footer_texts:
-        font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
-        draw.text((x, y), text, font=font_footer_text, fill=footer_color)
-
-    # Calculate the bounding box based on the drawn text
-    for text, x, y in footer_texts:
-        font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
-        left, top_bbox, right, bottom_bbox = get_text_bbox(draw, (x, y), text, font_footer_text)
-
-        # Update overall bounding box
-        all_left = min(all_left, left)
-        all_top = min(all_top, top_bbox)
-        all_right = max(all_right, right)
-        all_bottom = max(all_bottom, bottom_bbox)
-        
-    # draw.rectangle((all_left, all_top, all_right, all_bottom), outline="red", width=2) #add some padding
-    bbox = (all_left,all_top, all_right, all_bottom)
-    add_yolo_box("footer",bbox)
+    footer_text = 'www.mptc.gov.kh'
+    Date_x, Date_y = 2000, Line_Y + 80
+    font_footer_text = ImageFont.truetype(font_SiemReap, footer_font_size)
+    draw_text_without_bbox(draw, (Date_x, Date_y), footer_text, font=font_footer_text, fill=header_color, label="text")
     # draw_text_without_bbox(draw, (x,y), text, font=font_text, fill=text_color, label="footer")
     output_path = os.path.join(output_dir, f"kh_doc{i}.jpg")
     image.save(output_path, format="JPEG", quality=20, optimize=True)
