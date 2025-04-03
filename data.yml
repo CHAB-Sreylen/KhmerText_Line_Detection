@@ -1,13 +1,14 @@
 names:
+- decorative
 - text
 - logo
 - qr
 - stamp
 - footer
-nc: 5
-test: /home/ubuntu-vilalab/Desktop/Len/Testset/test/images
-test_labels: /home/ubuntu-vilalab/Desktop/Len/Testset/test/labels
-train: /home/ubuntu-vilalab/Desktop/Len/16000Data/images/train
-train_labels: /home/ubuntu-vilalab/Desktop/Len/16000Data/labels/train
-val: /home/ubuntu-vilalab/Desktop/Len/16000Data/images/val
-val_labels: /home/ubuntu-vilalab/Desktop/Len/16000Data/labels/val
+nc: 6
+test: E:\TextLine\KhmerText_Line_Detection\data\images\test
+test_labels: E:\TextLine\KhmerText_Line_Detection\data\labels\test
+train: E:\TextLine\KhmerText_Line_Detection\data\images\train
+train_labels: E:\TextLine\KhmerText_Line_Detection\data\labels\train
+val: E:\TextLine\KhmerText_Line_Detection\data\images\val
+val_labels: E:\TextLine\KhmerText_Line_Detection\data\labels\val
